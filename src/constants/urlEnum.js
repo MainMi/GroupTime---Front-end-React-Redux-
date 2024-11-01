@@ -1,4 +1,4 @@
-const api = process.env.REACT_APP_API_URL;
+import { REACT_APP_API_URL as api } from '../config/config';
 const urlEnum = {
     // auth
     api,

@@ -4,6 +4,8 @@ import Cookies from 'universal-cookie';
 import { getFetchDispatch } from '../../api/apiFetch';
 import { useSelector } from 'react-redux';
 
+import { decryptAES, encryptAES } from '../../helper/crypto';
+
 const cookies = new Cookies();
 
 const refreshAuthToken = async (headers) => {
@@ -171,6 +173,7 @@ export const fetchLogin = (body, navigate) => {
         headers: { 'Content-Type': 'application/json' },
         body,
     };
+    console.log(parameters);
 
     const helpFn = (data, navigate, dispatch) => {
         const { user, access_token, refresh_token } = data;

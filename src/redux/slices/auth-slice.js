@@ -13,6 +13,9 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         updateAuth: (state, action) => ({ ...state, ...action.payload }),
+        removeUserInfo: () => {
+            return { userInfo: {}, userToken: cookies.get('Access') };
+        },
         logOutAuth: () => {
             cookies.remove('Access');
             cookies.remove('Refresh');

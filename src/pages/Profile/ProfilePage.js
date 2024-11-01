@@ -9,7 +9,6 @@ import { authAction } from '../../redux/slices/auth-slice';
 import Button from '../../UI/Button/Button';
 import GroupCard from '../../UI/GroupCard/GroupCard';
 import HeaderImg from '../../UI/HeaderImg/HeaderImg';
-import buttonsImages from '../../static/image/buttonIcons';
 import contactImages from '../../static/image/contactsIcons';
 import classes from './ProfilePage.module.scss';
 import NotFoundGroups from '../../components/Group/NotFoundGroups/NotFoundGroups';

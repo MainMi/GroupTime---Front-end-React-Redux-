@@ -59,27 +59,22 @@ const GroupInfo = () => {
         <div className={classes.content}>
             <HeaderImg />
             <div className={classes.container}>
-                <Button
-                    typeColor='green'
-                    beforeImg='chevron'
-                    className={classes.btn}
-                    onClick={() => navigate(-1)}
-                >Назад</Button>
+                <Button typeColor='green' beforeImg='chevron' className={classes.btn} onClick={() => navigate(-1)}>Назад</Button>
                 <div className={classes.groupInfoBox}>
-                    <AvatarImg size={'large'}></AvatarImg>
+                    <AvatarImg size={'large'} src={groupInfo.avatar}></AvatarImg>
                     <div className={classes.groupInfo}>
                         <h1>{groupInfo.name}</h1>
                         <div className={classes.buttonBox}>
-                            <div className={`${classes.groupInfoBtn} ${isPrivate ? classes.private : ''}`}>
-                                <img src={buttonsImages[isPrivate ?'LockClose-pink': 'lockOpen-green']}></img>
-                                {groupInfo.type}
+                            <div className={classes.groupInfoBtn}>
+                                <img src={buttonsImages['LockClose-pink']}></img>
+                                private
                             </div>
                             <div className={`${classes.groupInfoBtn} ${classes.green}`}>
                                 <img src={buttonsImages['people-green']}></img>
                                 {groupInfo.userCount}/{groupInfo.parameters.usersLimit}
                             </div>
                         </div>
-                        <p>Опис: {groupInfo.description}</p>
+                        <p>Опис: Утопія ґрунтується на ідеї, що гроші корумпують владу і знищують справедливість і щастя в суспільстві. Гітлодей зазначає, що навіть найбагатші люди все одно нещасливі.</p>
                         <div className={classes.buttonBox}>
                             <Button>Видалити групу</Button>
                             <Button typeColor='green'>Редагувати</Button>
@@ -87,9 +82,8 @@ const GroupInfo = () => {
                     </div>
                 </div>
                 <div className={classes.userBox}>
-                    <p>Учасники групи</p>
+                    <p>Учасники групи: {groupInfo.userCount}</p>
                     <div className={classes.usersBox}>
-                        
                     </div>
                 </div>
             </div>

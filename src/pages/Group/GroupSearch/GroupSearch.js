@@ -12,6 +12,10 @@ import Input from '../../../UI/Input/Input';
 import { showErrorMsg } from '../../../error/error.validate.msg';
 import { useEffect, useState } from 'react';
 import { searchGroups } from '../../../api/groupFetch';
+import { useDispatch } from 'react-redux';
+
+import urlEnum from '../../../constants/urlEnum';
+import { getFetch } from '../../../redux/actions/auth-actions';
 
 const GroupsCards = ({ groups }) => {
     return <div className={classes.groupsBox}>
