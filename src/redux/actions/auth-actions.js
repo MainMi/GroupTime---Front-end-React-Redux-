@@ -1,92 +1,62 @@
 import { authAction } from '../slices/auth-slice';
 import urlEnum from '../../constants/urlEnum';
 import Cookies from 'universal-cookie';
+import { getFetchDispatch } from '../../api/apiFetch';
+import { useSelector } from 'react-redux';
 
 const cookies = new Cookies();
 
-const getFetch = (parameters, navigate, helpFn) => {
-    return async (dispatch) => {
-        try {
-            const { url, method = 'GET', headers = {} } = parameters;
-            const body = parameters.body ? JSON.stringify(parameters.body) : null;
-            const response = await fetch(url, {
-                method,
-                headers,
-                body
-            });
-            if (!response) {
-                throw new Error('Could not fetch data');
-            }
-            const data = await response.json();
-            if (data.status >= 400 && data.status < 600) {
-                if (data.status === 401 && data.errorStatus === 4011) {
-                    console.log('Please confirm email!');
-                    navigate('/sign');
-                    return;
-                }
-
-                throw new Error(data.message);
-            }
-            if (helpFn) {
-                helpFn(data, navigate, dispatch);
-            }
-        } catch (e) {
-            console.log(e);
-            throw e;
-        }
-    }
-}
-
-async function refreshAuthToken(headers) {
+const refreshAuthToken = async (headers) => {
     const refreshToken = cookies.get('Refresh');
-    if (!refreshToken) {
+    if (!refreshToken) return null;
+
+    try {
+        const response = await fetch(urlEnum.refresh, {
+            method: 'GET',
+            headers: { ...headers, 'Authorization': refreshToken },
+        });
+
+        if (!response.ok) return null;
+
+        const data = await response.json();
+        if (data.errorStatus) return null;
+
+        const { access_token, refresh_token } = data.tokenPair;
+        cookies.set('Access', access_token, { path: '/' });
+        cookies.set('Refresh', refresh_token, { path: '/' });
+
+        return data;
+    } catch (error) {
+        console.error('Failed to refresh auth token:', error);
         return null;
     }
+};
 
-    const refreshResponse = await fetch(urlEnum.refresh, {
-        method: 'GET',
-        headers: { ...headers, 'Authorization': refreshToken }
-    });
-
-    if (!refreshResponse) {
-        return null;
-    }
-
-    const refreshData = await refreshResponse.json();
-    if (refreshData.errorStatus) {
-        return null;
-    }
-
-    const { access_token, refresh_token } = refreshData.tokenPair;
-    cookies.set('Access', access_token);
-    cookies.set('Refresh', refresh_token);
-
-    return refreshData;
-}
-
-export const fetchAuth = (responseFn, navigate, responseArgm = {}) =>
-    async (dispatch) => {
+export const fetchAuthDispatch = (responseFn, navigate, responseArgm = {}) =>
+    async (dispatch, getState) => {
         const authToken = cookies.get('Access');
-        const url = urlEnum.userInfo;
+        const reduxAuthToken = getState().auth.userToken;
         if (!authToken || !authToken.length) {
             navigate('/sign');
             return;
         }
 
-        dispatch(authAction.updateAuth({ userToken: authToken }));
+        if (reduxAuthToken) {
+            dispatch(authAction.updateAuth({ userToken: authToken }));
+        }
 
         try {
-            let { method = 'POST', body = null } = responseArgm;
+
+            let { url = urlEnum.userInfo, method = 'POST', body = null } = responseArgm;
             const headers = {
                 'Content-Type': 'application/json',
                 'Authorization': authToken
             };
-            if (body) {
-                body = JSON.stringify(body)
-            }
 
             const parameters = { url, method, headers, body };
-            await dispatch(getFetch(parameters, navigate, async (data) => {
+
+            await dispatch(getFetchDispatch(parameters, navigate, async (data) => {
+                
                 const isUnauthorized = data.errorStatus === 4011 || data.errorStatus === 4012;
 
                 if (isUnauthorized) {
@@ -99,81 +69,140 @@ export const fetchAuth = (responseFn, navigate, responseArgm = {}) =>
                     const { access_token } = refreshedData.tokenPair;
                     dispatch(authAction.updateAuth({ userToken: access_token }))
                     const newParameters = { url, method, headers: { ...headers, 'Authorization': access_token }, body };
-                    await dispatch(getFetch(newParameters, navigate, responseFn));
+                    dispatch(getFetchDispatch(newParameters, navigate, responseFn));
                 } else {
                     if (data.status >= 400 && data.status < 600) {
-                        dispatch(authAction.logOutAuth());
-                        navigate('/sign');
+                        // dispatch(authAction.logOutAuth());
+                        // navigate('/sign');
+                        console.error(data)
                         return;
                     }
-                    responseFn(data, dispatch);
+                    responseFn(data, navigate, dispatch);
                 }
             }));
         } catch (e) {
             console.log(e);
-            dispatch(authAction.logOutAuth());
-            navigate('/sign');
+            // dispatch(authAction.logOutAuth());
+            // navigate('/sign');
         }
     };
+
+export async function fetchAuth(responseArgm = {}, navigate) {
+    const authToken = cookies.get('Access');
+    if (!authToken || !authToken.length) {
+        navigate('/sign');
+        return;
+    }
+    console.log('r', responseArgm);
+    
+    let { url = urlEnum.userInfo, method = 'POST', body = null } = responseArgm;
+    let headers = {
+        'Content-Type': 'application/json',
+        'Authorization': authToken
+    };
+
+    let parameters = { method, headers };
+
+    if (body) {
+        parameters.body = JSON.stringify(body);
+    }
+    console.log(parameters);
+    
+    try {
+        let response = await fetch(url, parameters);
+        let data = await response.json();
+
+        const isUnauthorized = data.errorStatus === 4011 || data.errorStatus === 4012;
+
+        if (isUnauthorized) {
+            const refreshedData = await refreshAuthToken(headers);
+            if (!refreshedData) {
+                navigate('/sign');
+                return;
+            }
+            const { access_token } = refreshedData.tokenPair;
+            headers['Authorization'] = access_token;
+            parameters.headers = headers;
+            response = await fetch(url, parameters);
+            data = await response.json();
+        }
+
+        if (data.status >= 400 && data.status < 600) {
+            console.error(data)
+            return { data };
+        }
+
+        
+        return { data, status: response.status, ok: response.ok };
+
+    } catch (e) {
+        console.error(e);
+        // navigate('/sign');
+    }
+}
+
 
 export const fetchRegister = (body, navigate) => {
     const parameters = {
         url: urlEnum.register,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: body,
+        body,
     };
 
     const helpFn = (data, navigate, dispatch) => {
         console.log('Please confirm email!');
         navigate('/sign');
-    }
+    };
 
     return async (dispatch) => {
         try {
-            await getFetch(parameters, navigate, helpFn)(dispatch);
-        } catch (e) {
-            console.log(e.message);
+            await dispatch(getFetchDispatch(parameters, navigate, helpFn));
+        } catch (error) {
+            console.error(error.message);
         }
-    }
-}
+    };
+};
 
 export const fetchLogin = (body, navigate) => {
     const parameters = {
         url: urlEnum.login,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: body,
+        body,
     };
 
-    const helpFn = async (data, navigate, dispatch) => {
+    const helpFn = (data, navigate, dispatch) => {
         const { user, access_token, refresh_token } = data;
+        
+        
         dispatch(authAction.updateAuth({
             userInfo: { ...user, password: undefined },
-            userToken: access_token
+            userToken: access_token,
         }));
 
-        cookies.set('Access', access_token);
-        cookies.set('Refresh', refresh_token);
+        cookies.set('Access', access_token, { path: '/' });
+        cookies.set('Refresh', refresh_token, { path: '/' });
 
         navigate('/profile');
-    }
+    };
 
     return async (dispatch) => {
         try {
-            await getFetch(parameters, navigate, helpFn)(dispatch);
-        } catch (e) {
-            console.log(e.message);
+            await dispatch(getFetchDispatch(parameters, navigate, helpFn));
+        } catch (error) {
+            console.error(error.message);
         }
-    }
-}
+    };
+};
 
-export const fetchUserInfo = () => {
-    const responseFn = (data, dispatch) => {
+export const fetchUserInfo = (navigate) => {
+    const responseFn = (data, navigate, dispatch) => {
+        data.birthday = new Date(data.birthday).toISOString();
         dispatch(authAction.updateAuth({
-            userInfo: { ...data, password: undefined }
-        }))
-    }
+            userInfo: { ...data, password: undefined },
+        }));
+    };
 
-    return fetchAuth(responseFn, { url: urlEnum.userInfo }, false);
-}
+    return fetchAuthDispatch(responseFn, navigate);
+};

@@ -1,0 +1,38 @@
+.modal {
+    border: 1px solid #E88C90;
+}
+
+
+
+.modalContent {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px;
+    height: 100%;
+    min-width: 350px;
+    .form {
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        label {
+            font-size: 14px;
+        }
+        .sectionBox {
+            position: relative;
+            display: grid;
+            grid-template-columns: 30% 70%;
+            width: 350px;
+            height: 100%;
+            gap: 12px 0;
+            justify-items: start;
+            align-items: center;
+        }
+        .buttonGroup {
+            display: flex;
+            gap: 8px;
+            align-self: flex-end;
+        }
+    }
+    
+}

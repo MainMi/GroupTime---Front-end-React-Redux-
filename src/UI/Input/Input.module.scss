@@ -4,6 +4,9 @@
     gap: 5px;
     position: relative;
     width: 100%;
+    &.only {
+        gap: 0;
+    }
 
     label {
         font-size: 14px;

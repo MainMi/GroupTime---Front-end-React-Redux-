@@ -8,6 +8,9 @@
     background-color: #FFFFFF;
     border: 2px solid #FFBEBE;
     border-radius: 10px;
+    &.notVerificate {
+        background-color: #f2fbdd;
+    }
     .groupInfo {
         position: relative;
         display: grid;
@@ -89,6 +92,13 @@
         align-items: center;
         justify-content: flex-end;
         gap: 8px;
+        .buttonBox {
+            display: flex;
+            gap: 10px;
+            button {
+                border-radius: 50%;
+            }
+        }
         .userCount {
             padding-right: 15px;
         }

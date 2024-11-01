@@ -2,7 +2,7 @@ import classes from './AvatarImg.module.scss'
 
 import logoPinkImg from '../../static/image/globalcons/logo-pink.svg'
 import { basicAvatarIconsArr } from '../../static/image/avatarIcons';
-import { generateRandomNumber } from '../../helper/random';
+import { generateRandomNumber } from '../../helper/randomHelper';
 
 const sizes = {
     small: {

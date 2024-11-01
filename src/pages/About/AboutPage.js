@@ -2,9 +2,12 @@ import classes from './AboutPage.module.scss'
 import HeaderImg from "../../UI/HeaderImg/HeaderImg";
 import logoIcon from '../../static/image/globalcons/logo.svg'
 import ContactInfo from '../../components/About/ContantInfo/ContactInfo';
+import Calendar from '../../UI/Calendar/Calendar';
+import Button from '../../UI/Button/Button';
 
 
 const AboutPage = () => {
+    const resultFn = (vl) => console.log(vl);
     return <>
     <HeaderImg/>
     <div className={classes.content}>
@@ -33,6 +36,8 @@ const AboutPage = () => {
                 <ContactInfo teamName='Uliana' isContact={true}/>
             </div>
         </div>
+        {/* <Calendar resultFn={resultFn}/> */}
+        <Calendar resultFn={resultFn}/>
         </div>
     </div>
     </>

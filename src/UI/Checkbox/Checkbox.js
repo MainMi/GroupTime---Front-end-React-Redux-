@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import classes from './Checkbox.module.scss'
 
-const  Checkbox = (props) => {
-    const {
-        typeColor,
-        size = 22,
-        error = false,
-        readOnly = false,
-        defaultChecked = false,
-        children,
-        ...otherParameters
-    } = props;
+const  Checkbox = ({
+    typeColor,
+    labelClassName = '', 
+    size = 22,
+    error = false,
+    readOnly = false,
+    defaultChecked = false,
+    children,
+    ...otherParameters
+}) => {
 
     const [ checked, setChehecked ] = useState(defaultChecked);
 
@@ -18,10 +18,11 @@ const  Checkbox = (props) => {
         ? setChehecked((prevState) => !prevState)
         : () => {};
 
-    const className = `${classes.checkBox} ${typeColor === 'green' ? classes.green : ''} ${error ? classes.error : ''}`;
+    const inputClassName = `${classes.checkBox} ${typeColor === 'green' ? classes.green : ''} ${error ? classes.error : ''}`;
+    const labelClassname = `${classes.labelBox} ${labelClassName}`;
 
-    return <label className={classes.labelBox}>
-        <input type="checkbox" className={className} onChange={clickChangeHandler} checked={checked} {...otherParameters }  />
+    return <label className={labelClassname}>
+        <input type="checkbox" className={inputClassName} onChange={clickChangeHandler} checked={checked} {...otherParameters }  />
         <span>{children}</span>
     </label>
         

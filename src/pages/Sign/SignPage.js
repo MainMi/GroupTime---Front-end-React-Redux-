@@ -13,6 +13,9 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { fetchRegister, fetchLogin } from '../../redux/actions/auth-actions';
+import ButtonSmall from '../../UI/Button/ButtonSmall';
+import validateFn from '../../constants/validateFn.enum';
+import { showErrorMsg } from '../../error/error.validate.msg';
 
 const SignPage = () => {
     const dispatch = useDispatch();
@@ -22,7 +25,7 @@ const SignPage = () => {
     const isLogin = searchParam.get('mode') === 'signIn';
     const signClass = `${classes.signBox} ${isLogin ? classes.signIn : ''}`;
     const [ isModalPassword, setIsModalPassword ] = useState(false);
-    const [ valuePassword, setPasswordValue ] = useState('');
+    const [ vlPassword, setPasswordValue ] = useState('');
 
     const passwordChanger = (newValue) => setPasswordValue(newValue);
 
@@ -31,29 +34,80 @@ const SignPage = () => {
         setIsModalPassword((prevState) => !prevState);
     }
 
-    const firstNameInput = useInput('');
-    const lastNameInput = useInput('');
-    const nicknameInput = useInput('');
-    const birthdayInput = useInput('');
-    const emailInput = useInput('');
-    const passwordInput = useInput('');
+    let {
+        value: valueEmail,
+        isValidInput: isValidEmail,
+        arrayError: arrayErrorEmail,
+        valueChangeHandler: emailChangeHandler,
+        inputBlurHandler: emailBlurHandler,
+    } = useInput((value) => {
+        const arrValidEmpty = validateFn.isNotEmptyFn(value)
+        const arrValidEmail = validateFn.isEmailFn(value);
+        return [...arrValidEmpty, ...arrValidEmail]
+    }, 'Email');
+
+    let {
+        value: valuePassword,
+        isValidInput: isValidPassword,
+        arrayError: arrayErrorPassword,
+        valueChangeHandler: passwordChangeHandler,
+        inputBlurHandler: passwordBlurHandler,
+    } = useInput((value) => {
+        const arrValidEmpty = validateFn.isNotEmptyFn(value)
+        const arrValidPassword = validateFn.isPasswordFn(value);
+        return [...arrValidEmpty, ...arrValidPassword]
+    }, 'Password');
+
+
+
+    let {
+        value: valueFirstName,
+        isValidInput: isValidFirstName,
+        arrayError: arrayErrorFirstName,
+        valueChangeHandler: firstNameChangeHandler,
+        inputBlurHandler: firstNameBlurHandler,
+    } = useInput(validateFn.isNotEmptyFn, 'FirstName');
+
+    let {
+        value: valueLastName,
+        isValidInput: isValidLastName,
+        arrayError: arrayErrorLastName,
+        valueChangeHandler: lastNameChangeHandler,
+        inputBlurHandler: lastNameBlurHandler,
+    } = useInput(validateFn.isNotEmptyFn, 'LastName');
+    let {
+        value: valueNickname,
+        isValidInput: isValidNickname,
+        arrayError: arrayErrorNickname,
+        valueChangeHandler: nicknameChangeHandler,
+        inputBlurHandler: nicknameBlurHandler,
+    } = useInput(validateFn.isNotEmptyFn, 'Nickname');
+    let {
+        value: valueBirthday,
+        isValidInput: isValidBirthday,
+        arrayError: arrayErrorBirthday,
+        valueChangeHandler: birthdayChangeHandler,
+        inputBlurHandler: birthdayBlurHandler,
+    } = useInput(validateFn.isNotEmptyFn, 'Birthday');
+
+    const isValid = isValidFirstName &&
+        isValidLastName &&
+        isValidNickname &&
+        isValidBirthday &&
+        isValidEmail &&
+        valuePassword
+    const isLoginValid = isValidEmail && isValidPassword;
 
     const registerHandler = async (ev) => {
         ev.preventDefault();
-        if (
-            firstNameInput.isValidInput &&
-            lastNameInput.isValidInput &&
-            nicknameInput.isValidInput &&
-            birthdayInput.isValidInput &&
-            emailInput.isValidInput &&
-            valuePassword
-        ) {
+        console.log('r');
+        if (isValid) {
             const registrationData = {
-                firstName: firstNameInput.value,
-                lastName: lastNameInput.value,
-                nickname: nicknameInput.value,
-                birthday: birthdayInput.value,
-                email: emailInput.value,
+                firstName: valueFirstName,
+                lastName: valueLastName,
+                nickname: valueNickname,
+                birthday: valueBirthday,
+                email: valueEmail,
                 password: valuePassword,
             };
 
@@ -63,11 +117,13 @@ const SignPage = () => {
 
     const loginHandler = async (ev) => {
         ev.preventDefault();
+        console.log('l');
+        
 
-        if (emailInput.isValidInput && passwordInput.isValidInput) {
+        if (isLoginValid) {
             const loginData = {
-                email: emailInput.value,
-                password: passwordInput.value,
+                email: valueEmail,
+                password: valuePassword,
             };
 
             dispatch(fetchLogin(loginData, navigate));
@@ -75,7 +131,7 @@ const SignPage = () => {
     };
 
     return <div className={classes.content}>
-        {isModalPassword && <ModalPassword value={valuePassword} passwordChanger={passwordChanger} onHiddenCart={clickPasswordHandler}/>}
+        {isModalPassword && <ModalPassword value={vlPassword} passwordChanger={passwordChanger} onHiddenCart={clickPasswordHandler}/>}
         <div className={signClass}>
             <form className={classes.registerForm} onSubmit={registerHandler}>
                 <HeaderImg className={classes.headerImg} left={0} top={0} position={'absolute'}/>
@@ -88,50 +144,55 @@ const SignPage = () => {
                     <Input
                         label="Ім'я"
                         placeholder="Введіть Ім'я"
-                        value={firstNameInput.value}
-                        onChange={firstNameInput.inputChangeHandler}
-                        onBlur={firstNameInput.inputBlurHandler}
+                        value={valueFirstName}
+                        onChange={firstNameChangeHandler}
+                        onBlur={firstNameBlurHandler}
                     />
+                    {showErrorMsg(arrayErrorFirstName, classes.errorMsg)}
                     <Input
                         label="Прізвище"
                         placeholder="Введіть Прізвище"
-                        value={lastNameInput.value}
-                        onChange={lastNameInput.inputChangeHandler}
-                        onBlur={lastNameInput.inputBlurHandler}
+                        value={valueLastName}
+                        onChange={lastNameChangeHandler}
+                        onBlur={lastNameBlurHandler}
                     />
+                    {showErrorMsg(arrayErrorLastName, classes.errorMsg)}
                     <Input
                         label="Нікнейм"
                         placeholder="Введіть Нікнейм"
-                        value={nicknameInput.value}
-                        onChange={nicknameInput.inputChangeHandler}
-                        onBlur={nicknameInput.inputBlurHandler}
+                        value={valueNickname}
+                        onChange={nicknameChangeHandler}
+                        onBlur={nicknameBlurHandler}
                     />
+                    {showErrorMsg(arrayErrorNickname, classes.errorMsg)}
                     <Input
                         label="День народження"
                         placeholder="Введіть День народження"
-                        value={birthdayInput.value}
-                        onChange={birthdayInput.inputChangeHandler}
-                        onBlur={birthdayInput.inputBlurHandler}
+                        value={valueBirthday}
+                        onChange={birthdayChangeHandler}
+                        onBlur={birthdayBlurHandler}
                     />
+                    {showErrorMsg(arrayErrorBirthday, classes.errorMsg)}
                     <Input
+                        id="email"
                         label="Пошта"
                         placeholder="Введіть Пошта"
-                        value={emailInput.value}
-                        onChange={emailInput.inputChangeHandler}
-                        onBlur={emailInput.inputBlurHandler}
+                        value={valueEmail}
+                        onChange={emailChangeHandler}
+                        onBlur={emailBlurHandler}
                     />
                     <Input
+                        id="password"
                         type="password"
                         onClick={clickPasswordHandler}
-                        value={valuePassword}
+                        value={vlPassword}
                         readOnly={true}
                         label="Пароль"
                         placeholder="Введіть Пароль"
-                        onChange={passwordInput.inputChangeHandler}
-                        onBlur={passwordInput.inputBlurHandler}
                     />
+                    {showErrorMsg(arrayErrorEmail, classes.errorMsg)}
                 </div>
-                <Button height={'fit-content'}>Зареєструватися</Button>
+                <Button height={'fit-content'} disabled={!isValid}>Зареєструватися</Button>
                 <div className={classes.mobileButtonBox}>
                     <p>Уже маєте аккаунт?</p>
                     <Link to={'/sign?mode=signIn'} >Увійти</Link>
@@ -145,23 +206,25 @@ const SignPage = () => {
                 </div>
                 <div className={classes.inputBox}>
                     <Input
+                        id="email"
                         label="Пошта"
                         placeholder="Введіть Пошта"
-                        value={emailInput.value}
-                        onChange={emailInput.inputChangeHandler}
-                        onBlur={emailInput.inputBlurHandler}
+                        value={valueEmail}
+                        onChange={emailChangeHandler}
+                        onBlur={emailBlurHandler}
                     />
+                    {showErrorMsg(arrayErrorEmail, classes.errorMsg)}
                     <Input
                         type="password"
                         label="Пароль"
                         placeholder="Введіть Пароль"
-                        value={passwordInput.value}
-                        onChange={passwordInput.inputChangeHandler}
-                        onBlur={passwordInput.inputBlurHandler}
+                        value={valuePassword}
+                        onChange={passwordChangeHandler}
+                        onBlur={passwordBlurHandler}
                     />
                     <a className={classes.forgetPassword}>Забули пароль?</a>
                 </div>
-                <Button height={'fit-content'}>Увійти</Button>
+                <Button height={'fit-content'} disabled={!isLoginValid}>Увійти</Button>
                 <div className={classes.mobileButtonBox}>
                     <p>Не маєте акаунту?</p>
                     <Link to={'/sign?mode=signUp'}>Зареєструватися</Link>

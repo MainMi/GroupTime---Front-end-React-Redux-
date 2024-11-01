@@ -38,16 +38,16 @@
                         gap: 8px;
                         padding: 4px 16px;
                         border-radius: 10px;
-                        border: 1px solid #E86C6E;
-                        background-color: #FCE0DC;
+                        border: 1px solid #A2C059;
+                        background-color: #ECFFBF;
                         img {
                             width: 22px;
                             height: 22px;
                             object-fit: cover;
                         }
-                        &.green {
-                            border: 1px solid #A2C059;
-                            background-color: #ECFFBF;
+                        &.private {
+                            border: 1px solid #E86C6E;
+                            background-color: #FCE0DC;
                         }
                     }
                 }

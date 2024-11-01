@@ -32,7 +32,18 @@
     &.green:disabled,
     &.darKGreen:disabled {
         background-color: #C4B0B1;
+        border: 2px solid #C4B0B1;
         color: #FFF1E5;
+        &:hover {
+            background-color: #C4B0B1;
+            border: 2px solid #C4B0B1;
+            color: #FFF1E5;
+        }
+        &:focus {
+            background-color: #C4B0B1;
+            border: 2px solid #C4B0B1;
+            color: #FFF1E5;
+        }
     }
     &.noBorder {
         color: #AB4749;

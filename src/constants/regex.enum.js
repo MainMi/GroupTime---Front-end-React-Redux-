@@ -7,6 +7,7 @@ const regex = {
     REGEX_NUMBER_CHAR: /^(?=.*[0-9])/,
     REGEX_SPECIAL_CHAR: /^(?=.*[@$!%*#?&])/,
     REGEX_LENGTH_CHAR: /^(?=.{8,})/,
+    TIME_REGEX: /\d{1,2}:\d{2}(:\d{2})?/
 }
 
 export default regex;

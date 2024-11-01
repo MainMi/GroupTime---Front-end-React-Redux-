@@ -1,31 +1,36 @@
-import { useState } from "react";
+import { useState } from "react"
+import errorValidateMsg from "../error/error.validate.msg";
 
-const emptyValidFn = (vl) => vl;
-
-const useInput = (initialValue, validateFn = emptyValidFn) => {
+const useInput = (validateFn = false, nameValue, initialValue = '') => {
     const [enteredValue, setEnteredValue] = useState(initialValue)
-    const [didEdit, setDidEdit] = useState(false)
+    const [isTouch, setIsTouch] = useState(false);
 
-    const validValue = validateFn(enteredValue);
+    const errorArrMsg = errorValidateMsg(nameValue, enteredValue);
+    let arrayValidate = validateFn ? validateFn(enteredValue) : [];
+    arrayValidate = arrayValidate.map((value) => {
+        return errorArrMsg[value]
+    });
 
-    const inputChangeHandler = (event) => {
+    const checkError = arrayValidate.length && isTouch;
+
+    const valueChangeHandler = (event) => {
         setEnteredValue(event.target.value)
     }
 
     const inputBlurHandler = (event) => {
-        setDidEdit(true);
+        setIsTouch(true);
     }
 
     const resetFn = () => {
         setEnteredValue('');
-        setDidEdit(false);
+        setIsTouch(false);
     }
 
     return {
         value: enteredValue,
-        isValidInput: !(validValue.lenght),
-        error: didEdit && validValue,
-        inputChangeHandler,
+        isValidInput: !(arrayValidate.length),
+        arrayError: checkError ? arrayValidate : [],
+        valueChangeHandler,
         inputBlurHandler,
         resetFn
     }

@@ -14,12 +14,13 @@ const ModalPassword = (props) => {
         passwordChanger,
         onHiddenCart
     } = props;
+    console.log(value);
     
     const {
         value: passwordValue,
-        inputChangeHandler: passwordChangeHandler,
+        valueChangeHandler: passwordChangeHandler,
         inputBlurHandler: passwordBlurHandler
-    } = useInput(value);
+    } = useInput('', 'password', value);
     const isRegex = (pattern) => {
         const regex = new RegExp(pattern)
         return regex.test(passwordValue);

@@ -6,6 +6,8 @@ import SignPage from './pages/Sign/SignPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import GroupSearch from './pages/Group/GroupSearch/GroupSearch';
 import GroupInfo from './pages/Group/GroupInfo/GroupInfo';
+import GroupEdit from './pages/Group/GroupEdit/GroupEdit';
+import SchedulePage from './pages/Schedule/SchedulePage';
 
 function App() {
     const router = createBrowserRouter([
@@ -13,13 +15,16 @@ function App() {
             path: '/',
             element: <RootLayout />,
             children: [
-                { path: '/', element: <AboutPage /> },
-                { path: '/sign', element: <SignPage /> },
-                { path: '/profile', element: <ProfilePage /> },
-                { path: '/groups', element: <GroupSearch />, },
-                { path: '/groups/create', element: <GroupInfo /> }
+                { index: true, element: <AboutPage /> },
+                { path: 'sign', element: <SignPage /> },
+                { path: 'profile', element: <ProfilePage /> },
+                { path: 'groups', element: <GroupSearch /> },
+                { path: 'groups/info/:groupId', element: <GroupInfo /> },
+                { path: 'groups/edit', element: <GroupEdit /> },
+                { path: 'schedule', element: <SchedulePage /> },
             ]
         }
+        
     ]);
 
     return (

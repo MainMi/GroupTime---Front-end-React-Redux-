@@ -6,16 +6,16 @@ const Backdrop = (props) => {
 }
 
 const ModalOverlays = (props) => {
-    return <div className={classes.modal} style={{...props.otherStyles}}>
+    return <div className={`${classes.modal} ${props.classname}`} style={{...props.otherStyles}}>
             {props.children}
         </div>
 }
 const overlays = document.getElementById('overlays');
 const Modal = (props) => {
-    const { children, onHiddenCart, ...otherStyles } = props;
+    const { children, onHiddenCart, modalClassname, ...otherStyles } = props;
     return <>
         {ReactDOM.createPortal(<div className={classes.content}>
-            <ModalOverlays {...otherStyles}>{children}</ModalOverlays>, overlays
+            <ModalOverlays classname={modalClassname} {...otherStyles}>{children}</ModalOverlays>
             <Backdrop onHiddenCart={onHiddenCart}/>
         </div>, overlays)}
     </>

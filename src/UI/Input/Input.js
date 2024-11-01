@@ -3,8 +3,20 @@ import classes from './Input.module.scss'
 import openEyes from '../../static/image/inputIcons/openEyes.svg'
 import closeEyes from '../../static/image/inputIcons/closeEyes.svg'
 
-const Input = (props) => {
-    const { label, id, error = '', size = 14, type = 'text', style,  ...otherProps } = props;
+const Input = ({
+    label = false,
+    placeholder = '',
+    id = label || '',
+    error = '',
+    size = 14,
+    type = 'text',
+    style,
+    labelClassName = '',
+    labelBoxClassName = '',
+    inputClassName = '', 
+    ...otherProps
+}) => {
+
 
     const className = `${classes.input} ${error ? classes.error : ''}`
     const styleSize = { fontSize: `${size}px`};
@@ -15,18 +27,19 @@ const Input = (props) => {
 
     const onHiddenText = () => setTypeInput(isPassword ? 'text' : 'password');
 
-    return <div className={classes.labelBox}>
-        <label htmlFor={id} style={styleSize}>{label}</label>
+    return <div className={`${classes.labelBox} ${!label ? classes.only : ''} ${labelBoxClassName}`}>
+        {label && <label htmlFor={id} style={styleSize} className={labelClassName}>{label}</label>}
         <input
             id={id}
+            placeholder={placeholder}
             type={typeInput}
-            className={className}
+            className={`${className} ${inputClassName}`}
             style={inputSize}
             {...otherProps}
         >
         </input>
         {type === 'password' && <img src={ isPassword ? openEyes : closeEyes } onClick={onHiddenText} alt='c'></img>}
-        {!!error.lenght || <div className={classes.error}>{error}</div>}
+        {!!error.lenght && <div className={classes.error}>{error}</div>}
     </div>
 }
 
