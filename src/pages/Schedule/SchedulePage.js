@@ -12,22 +12,42 @@ import { useNavigate } from 'react-router-dom';
 import { fetchUserInfo } from '../../redux/actions/auth-actions';
 import { getISOWeekNumber } from '../../helper/dateHelper';
 import { getScheduleWeekInfo } from '../../api/scheduleFetch';
+import calendarEnum from '../../constants/calendarEnum';
+import logo from '../../static/image/globalcons/logo.svg'
+import Modalassistant from '../../components/Schedule/ModalAssitent/ModalAssitent';
 
 const SchedulePage = () => {
-    const today = new Date('September 25 2024');
+    const today = new Date('September 24 2024');
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const userInfo = useSelector((state) => state.auth.userInfo);
     const schedules = useSelector((state) => state.schedule.schedules);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [timeSheet, setTimeSheet] = useState(90);
+    const [isModalEvent, setIsModalEvent] = useState(false);
+    const [isModalassistant, setIsModalassistant] = useState(false);
+
+    const [timeSheet, setTimeSheet] = useState(1);
     const [date, setDate] = useState(today);
+
     const [existingItem, setExistingItem] = useState(null);
     const [selectedGroup, setSelectedGroup] = useState(0);
 
-    const toggleModal = useCallback(() => {
-        setIsModalOpen((prevState) => !prevState);
+    const squareIcons = ['square', 'duo-square', 'three-square']
+
+    const timeSheetChangeHandler = () => setTimeSheet(
+        timeSheet != calendarEnum.MTD
+        ? timeSheet + 1
+        : 0
+    )
+
+
+    const toggleModalEvent = useCallback(() => {
+        setIsModalEvent((prevState) => !prevState);
+    }, []);
+
+    const toggleModalassistant = useCallback(() => {
+        setIsModalassistant((prevState) => !prevState);
     }, []);
 
     useEffect(() => {
@@ -90,17 +110,29 @@ const SchedulePage = () => {
                         <ButtonSmall centerImg="chevron-pink" className={classes.button} />
                         <ButtonSmall centerImg="chevron-pink" className={classes.button} />
                     </div>
-                    <Button afterImg="plus" onClick={toggleModal}>
-                        Створити подію
-                    </Button>
+                    <div className={classes.buttonBox}>
+                        <ButtonSmall
+                            centerImg={logo}
+                            onClick={toggleModalassistant}
+                        />
+                        <ButtonSmall
+                            centerImg={squareIcons[timeSheet]}
+                            onClick={() => timeSheetChangeHandler()}
+                            typeColor='green'
+                        />
+                        <Button afterImg="plus" onClick={toggleModalEvent}>
+                            Створити подію
+                        </Button>
+                    </div>
                 </div>
                 {existingItem && <EventTable
-                    timeSheet={timeSheet}
+                    timeSheet={(timeSheet + 1) * calendarEnum.TS}
                     periodStartEvent={periodStartEvent}
                     periodEndEvent={periodEndEvent}
                     scheduleWeek={existingItem}
                 />}
-                <ModalCreateEvent modalOpen={isModalOpen} modalClose={toggleModal} />
+                {isModalEvent && <ModalCreateEvent modalClose={toggleModalEvent} />}
+                {isModalassistant && <Modalassistant modalClose={toggleModalassistant} userInfo={userInfo} />}
             </div>
         </div>
     );

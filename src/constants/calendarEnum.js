@@ -1,6 +1,6 @@
 const currentYear = new Date().getFullYear()
 
-const constants = {
+const calendarEnum = {
     weeksArr: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     weekFullArr: ['Monday', 'Tuesday', 'Wensday', 'Thuesday', 'Friday', 'Saturday', 'Sunday'],
     monthArr: [
@@ -14,7 +14,8 @@ const constants = {
     currentYear,
     minBirthdayYear: currentYear - 100,
     maxBirthdayYear: currentYear - 14,
-    defaultTimesheet: 60
+    TS: 30,
+    MTD: 2 // Max Timesheet Duration = (MTD + 1) * TS 
 };
 
-export default constants;
+export default calendarEnum;

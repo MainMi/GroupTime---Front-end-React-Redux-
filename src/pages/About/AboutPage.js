@@ -27,7 +27,7 @@ const AboutPage = () => {
                 <p>За допомогою GroupTime, кожен день може бути заповнений новими можливостями, де ви зможете долучити себе до захоплюючих проектів та подій. Приєднуйтеся до нас і давайте разом створимо спільноту, що надихає та розвиває!</p>
             </div>
         </div>
-        <div className={classes.teamBox}>
+        {/* <div className={classes.teamBox}>
             <h2>Наша Команда</h2>
             <div className={classes.teamGrid}>
                 <ContactInfo teamName='Mykyta' isContact={true}/>
@@ -35,9 +35,7 @@ const AboutPage = () => {
                 <ContactInfo teamName='Anna' isContact={true}/>
                 <ContactInfo teamName='Uliana' isContact={true}/>
             </div>
-        </div>
-        {/* <Calendar resultFn={resultFn}/> */}
-        <Calendar resultFn={resultFn}/>
+        </div> */}
         </div>
     </div>
     </>

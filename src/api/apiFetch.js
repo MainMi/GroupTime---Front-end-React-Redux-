@@ -9,7 +9,6 @@ export const getFetchDispatch = (parameters, navigate, helpFn) => {
                 body: body ? JSON.stringify(body) : null,
             });
             const data = await response.json();
-            console.log(data);
             
             if (!response.ok) {
                 if (data.status === 401 && data.errorStatus === 4011) {
@@ -49,13 +48,17 @@ export const getFetch = async (parameters, navigate, helpFn) => {
                 navigate('/sign');
                 return;
             }
+            console.error(data);
+            return { data, status: response.status, ok: response.ok };
         }
 
 
         if (helpFn) {
             helpFn(data, navigate);
         }
-        return data;
+        const result = data.data ? data.data : data;
+        
+        return { data: result, status: response.status, ok: response.ok };
     } catch (error) {
         console.error(error);
         throw error;

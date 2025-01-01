@@ -2,10 +2,21 @@
     position: relative;
     display: grid;
     justify-items: start;
+    align-items: center;
     grid-template-columns: auto 1fr auto;
     width: 100%;
     padding: 8px 16px;
     border: 2px solid #ACCA62;
     gap: 16px;
     border-radius: 8px;
+    &.notVerify {
+        background-color: #ECFFBF;
+    }
+    .nickname {
+        font-size: 16px;
+        color: #4E4E4E;
+    }
+    .btn {
+        height: max-content;
+    }
 }

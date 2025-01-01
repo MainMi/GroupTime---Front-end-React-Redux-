@@ -33,6 +33,7 @@ const GroupsCards = ({ userGroups, checkInvite = false }) => {
             statusName={groupInfo.role}
             isVerificate={isVerificate}
             actionToken={groupInfo.actionToken}
+            isView={true}
         />)
     }
     );

@@ -3,7 +3,7 @@ import ButtonSmall from "../Button/ButtonSmall";
 import buttonsImages from '../../static/image/buttonIcons';
 import AvatarImg from '../AvatarImg/AvatarImg';
 import { useNavigate } from 'react-router-dom';
-import { acceptInviteGroup, deleteInviteGroup } from '../../api/groupFetch';
+import { acceptInviteGroup, deleteInviteGroup, joinGroup } from '../../api/groupFetch';
 import { useDispatch } from 'react-redux';
 import { fetchUserInfo } from '../../redux/actions/auth-actions';
 
@@ -17,13 +17,12 @@ const GroupCard = ({
     statusName = status,
     usersCount,
     maxCount,
-    type = 'view',
-    isVerificate = true
+    isView,
+    isVerificate = true,
 }) => {
 
     const navigate = new useNavigate();
 
-    const isView = type === 'view';
     const isPrivate = status === 'private';
     const isMaxGroups = usersCount === maxCount;
     const dispatch = useDispatch();
@@ -34,6 +33,13 @@ const GroupCard = ({
             : await deleteInviteGroup(actionToken)
         dispatch(fetchUserInfo(navigate))
     }
+    const addUserToGroup = async () => {
+        const response = await joinGroup(id);
+        if (response.ok) {
+            navigate(`/groups/info/${id}`);
+            return;
+        }
+    };
     return <div className={`${classes.content} ${!isVerificate ? classes.notVerificate : ''}`}>
         <div className={classes.groupInfo}>
             <div className={classes.infoBox}>
@@ -56,7 +62,7 @@ const GroupCard = ({
             <img></img>
             <p className={classes.userCount}>{usersCount}/{maxCount}</p>
             {isVerificate ? <ButtonSmall
-                onClick={() => navigate(`/groups/info/${id}`)}
+                onClick={() => isView ? navigate(`/groups/info/${id}`) : addUserToGroup()}
                 typeColor={isView ? "green" : "darkGreen"}
                 className={isView ? classes.goToButton : classes.addButton}
                 centerImg={isView ? 'chevron' : 'plus'}

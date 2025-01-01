@@ -12,14 +12,24 @@ const urlEnum = {
 
     // group
     createGroup: `${api}/group/create`,
+    editGroup: `${api}/group/edit`,
+    leaveGroup: `${api}/group/leave`,
+    deleteGroup: `${api}/group/delete`,
     groupInfo: `${api}/group/info`,
     groupSearch: `${api}/group/search`,
+    groupJoin: `${api}/group/join`,
+
+    // invite
     inviteUsers: `${api}/group/invite/users`,
     acceptInvite: `${api}/group/confirm/invite`,
     deleteInvite: `${api}/group/delete/invite`,
     
     // schedule
-    scheduleWeekInfo: `${api}/schedule/week/info`
+    scheduleWeekInfo: `${api}/schedule/week/info`,
+
+    // message
+    messageSend: `${api}/message/send`,
+    messageGetLast: `${api}/message/getLast`
 };
 
 export default urlEnum;

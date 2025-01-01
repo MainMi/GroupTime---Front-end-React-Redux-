@@ -6,15 +6,12 @@
     padding: 8px;
     font-size: 16px;
     color: #FFF1E5;
-    background-color: #BC4749;
+    background-color: #E88C90;
     border-radius: 10px;
     gap: 10px;
     transition: 250ms;
     border: 2px solid #BC4749;
-    img {
-        width: 16px;
-        height: 16px;
-    }
+
     &:hover,
     &.noBorder:hover {
         background-color: #9E3E40;
@@ -27,6 +24,11 @@
         border: 2px solid #9E3E40;
         color: #FFF1E5;
     }
+    img {
+        width: 16px;
+        height: 16px;
+    }
+
     &:disabled,
     &.noBorder:disabled,
     &.green:disabled,

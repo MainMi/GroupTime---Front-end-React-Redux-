@@ -5,7 +5,9 @@ const errorValidateMsg = (nameValue = '', value = 0) => {
         'dataError': `${nameValue} ${value} - is not correct`,
         'emailError': `${nameValue} is incorrect`,
         'passwordError': `${nameValue} is incorrect`,
-        'phoneError': `${nameValue} is not correct phone number`
+        'phoneError': `${nameValue} is not correct phone number`,
+        'typeError': `${nameValue} is not correct type`,
+        'limitError': `${nameValue} is out of range`
     }
 }
 

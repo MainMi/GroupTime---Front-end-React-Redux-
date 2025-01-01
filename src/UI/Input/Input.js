@@ -25,7 +25,7 @@ const Input = ({
     const [ typeInput, setTypeInput ] = useState(type);
     const isPassword = typeInput === 'password';
 
-    const onHiddenText = () => setTypeInput(isPassword ? 'text' : 'password');
+    const onHiddenText = () => setTypeInput(isPassword ? type : 'password');
 
     return <div className={`${classes.labelBox} ${!label ? classes.only : ''} ${labelBoxClassName}`}>
         {label && <label htmlFor={id} style={styleSize} className={labelClassName}>{label}</label>}

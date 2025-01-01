@@ -20,6 +20,7 @@
             flex-direction: column;
             justify-content: center;
             gap: 10px;
+
         }
     }
     .eventTable {
@@ -41,6 +42,15 @@
             align-items: center;
             justify-content: space-between;
             padding-left: 24px;
+            .buttonBox {
+                display: flex;
+                gap: 10px;
+                .aiIcon {
+                    background-color: #ffbdbd;
+                    border: 1px solid #ffbdbd;
+                    border-radius: 50%;
+                }
+            }
             .monthHandler {
                 display: flex;
                 align-items: center;

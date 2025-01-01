@@ -1,5 +1,5 @@
 import regex from "./regex.enum"
-import constants from "./constantEnum"
+import constants from "./calendarEnum"
 
 export const validateFn = {
     isNotEmptyFn: (value) => value.trim() === '' ? ['emptyError'] : [],
@@ -26,7 +26,15 @@ export const validateFn = {
     isPasswordFn: (value) => {
         const regexEmail = new RegExp(regex.REGEX_PASSWORD);
         return !regexEmail.test(value) ? ['passwordError'] : []
-    }
+    },
+    isNumberFn: (value, min, max) => {
+        if (Number.isNaN(+value)) {
+            return ['typeError']
+        } else if (value < min || value > max) {
+            return ['limitError']
+        }
+        return []
+    } 
 }
 
 export default validateFn;

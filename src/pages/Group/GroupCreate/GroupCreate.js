@@ -6,7 +6,7 @@ import Input from '../../../UI/Input/Input';
 import Textarea from '../../../UI/Textarea/Textarea';
 import UserCard from '../../../UI/UserCard/UserCard';
 import buttonsImages from '../../../static/image/buttonIcons';
-import classes from './GroupEdit.module.scss';
+import classes from './GroupCreate.module.scss';
 import { useNavigate } from 'react-router-dom';
 import ButtonSmall from '../../../UI/Button/ButtonSmall';
 import Dropdown from '../../../UI/Dropdown/Dropdown';
@@ -19,12 +19,18 @@ import { useDispatch } from 'react-redux';
 import { createGroup, inviteUsersToGroup } from '../../../api/groupFetch';
 import { fetchUserInfo } from '../../../redux/actions/auth-actions';
 
-const GroupEdit = () => {
+const GroupCreate = () => {
     const navigate = useNavigate();
 
     const [readyAddUsers, setReadyAddUsers] = useState([]);
     const [privateType, setPrivateType] = useState(groupTypeEnum.PUBLIC_TYPE)
+    const [editUser, setEditUser] = useState(null);
     const changePrivateTypeHandler = (value) => setPrivateType(value);
+    const addEditUserHandler = (e, idx, id) => {
+        e.preventDefault();
+        setEditUser({ id: idx, user: readyAddUsers[idx]});
+        setReadyAddUsers((prevState) => prevState.filter(({user}) => user.id !== id));
+    }
 
     let {
         value: valueGroupName,
@@ -86,14 +92,6 @@ const GroupEdit = () => {
         }
         dispatch(fetchUserInfo(navigate));
         navigate('/profile');
-
-        console.log({
-            name: valueGroupName,
-            description: valueDescription,
-            type: privateType,
-            users,
-            roles
-        });
     };
 
     const deleteUserHandler = (id) => setReadyAddUsers((prevState) =>
@@ -145,7 +143,7 @@ const GroupEdit = () => {
                 <div className={classes.usersForm}>
                     <div className={classes.addUsers}>
                         <p>Додання користувачів</p>
-                        <AddUserForm readyAddUsers={readyAddUsers} onAddUser={handleAddUser} navigate={navigate} />
+                        <AddUserForm editUser={editUser} readyAddUsers={readyAddUsers} onAddUser={handleAddUser} navigate={navigate} />
                     </div>
                     <div className={classes.usersBox}>
                         {readyAddUsers.map((userInfo, idx) => <div className={classes.userCardBox} id={userInfo.user.id}>
@@ -156,6 +154,11 @@ const GroupEdit = () => {
                                     borderRadius={'50%'}
                                     centerImg={buttonsImages.edit}
                                     className={classes.btn}
+                                    onClick={(e) => addEditUserHandler(
+                                        e,
+                                        idx,
+                                        userInfo.user.id
+                                    )}
                                 />
                                 <ButtonSmall
                                     typeColor='pink'
@@ -175,4 +178,4 @@ const GroupEdit = () => {
     );
 };
 
-export default GroupEdit;
+export default GroupCreate;

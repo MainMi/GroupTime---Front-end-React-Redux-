@@ -17,6 +17,10 @@ import lockOpen from './lockOpenIcon.svg'
 import lockOpenPink from './lockOpenIcon-pink.svg'
 import lockOpenGreen from './lockOpenIcon-green.svg'
 import peopleGreen from './peopleIcon-green.svg'
+import message from './message.svg'
+import square from './squareIcon.svg'
+import duoSquare from './duoSquareIcon.svg'
+import threeSquare from './threeSquareIcon.svg'
 import groups from './groupsIcon-white.svg'
 import plus from './plusIcon.svg'
 import trash from './trashIcon.svg'
@@ -43,6 +47,10 @@ const buttonsImages = {
     'people-green': peopleGreen,
     groups,
     plus,
+    message,
+    square,
+    'duo-square': duoSquare,
+    'three-square': threeSquare,
     trash
 }
 

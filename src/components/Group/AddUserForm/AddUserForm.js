@@ -6,7 +6,12 @@ import roleEnum from '../../../constants/roleEnum';
 import { searchUsers } from '../../../api/userFetch';
 import classes from './AddUserForm.module.scss';
 
-const AddUserForm = ({ onAddUser, readyAddUsers, navigate }) => {
+const AddUserForm = ({
+    onAddUser,
+    readyAddUsers,
+    navigate,
+    editUser
+}) => {
     const [userInfo, setUserInfo] = useState('');
     const [role, setRole] = useState('');
     const [userNameInfo, setUserNameInfo] = useState({
@@ -14,6 +19,7 @@ const AddUserForm = ({ onAddUser, readyAddUsers, navigate }) => {
         length: 0,
         isFound: false
     });
+    const [searchVal, setSearchVal] = useState(null);
     const [usersInfo, setUsersInfo] = useState([]);
 
     const changeRoleHandler = (value) => setRole(value);
@@ -32,10 +38,25 @@ const AddUserForm = ({ onAddUser, readyAddUsers, navigate }) => {
     const searchDropdownResetRef = useRef(null);
 
     useEffect(() => {
+        if (!editUser) {
+            return;
+        }
+        const { user } = editUser.user;
+        
+        setUserNameInfo({
+            value: user,
+            length: 4,
+            isFound: true
+        });
+        setUserInfo(user)
+        setSearchVal(user.fullName)
+        
+    },  [editUser])
+
+    useEffect(() => {
         const fetchUsers = async (userName) => {
             try {
                 let { data: { data = [] }, status } = await searchUsers(userName, navigate);
-                console.log(data, readyAddUsersIds);
                 if (status !== 200) {
                     throw new Error(data)
                 }
@@ -62,17 +83,12 @@ const AddUserForm = ({ onAddUser, readyAddUsers, navigate }) => {
     const clickAddUserHandler = (event) => {
         event.preventDefault();
         if (!isValidSubmit) return;
-        console.log('f');
         
         onAddUser({ user: userNameInfo.value, role });
-        console.log(readyAddUsersIds.length);
         setUsersInfo([])
-        // setUsersInfo((prevState) => prevState.filter((user) =>
-        //     user.id !== userNameInfo.value.id 
-        // ))
-
         setUserNameInfo({ value: '', length: 0, isFound: false });
         setRole('');
+        setSearchVal(null);
         dropdownResetRef.current();
         searchDropdownResetRef.current();
     };
@@ -88,6 +104,7 @@ const AddUserForm = ({ onAddUser, readyAddUsers, navigate }) => {
                     options={usersInfo}
                     isUserFind
                     selectedVal={userInfo}
+                    setVal={searchVal}
                     resetFn={(reset) => searchDropdownResetRef.current = reset}
                 />
             </div>

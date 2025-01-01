@@ -11,8 +11,12 @@ const ModalOverlays = (props) => {
         </div>
 }
 const overlays = document.getElementById('overlays');
-const Modal = (props) => {
-    const { children, onHiddenCart, modalClassname, ...otherStyles } = props;
+const Modal = ({
+    children,
+    onHiddenCart,
+    modalClassname,
+    ...otherStyles
+}) => {
     return <>
         {ReactDOM.createPortal(<div className={classes.content}>
             <ModalOverlays classname={modalClassname} {...otherStyles}>{children}</ModalOverlays>

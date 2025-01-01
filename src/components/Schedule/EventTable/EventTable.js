@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import classes from './EventTable.module.scss';
 import generateTimeArray, { getEventIntervals, addTime } from '../../../helper/dateHelper';
-import constants from '../../../constants/constantEnum';
 import EventsHour from '../EventHour/EventHour';
 import ModalShowEvents from '../ModalShowEvents/ModalShowEvents';
+import calendarEnum from '../../../constants/calendarEnum';
 
 const EventTable = ({
     timeSheet,
@@ -62,7 +62,7 @@ const EventTable = ({
     return (
         <>
             <div className={classes.weekInfo}>
-                {constants.weekFullArr.map((day, idx) => (
+                {calendarEnum.weekFullArr.map((day, idx) => (
                     <div key={day} className={classes.weekButton}>
                         <span>{day}</span>
                         <span>{10 + idx}</span>

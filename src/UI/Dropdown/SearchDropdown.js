@@ -6,6 +6,7 @@ const SearchableDropdown = ({
     options = [],
     placeholder,
     selectedVal,
+    setVal,
     filterFn,
     isUserFind = false,
     handleChange,
@@ -28,7 +29,16 @@ const SearchableDropdown = ({
     };
 
     useEffect(() => {
-        if (resetFn) {
+        if (setVal) {
+            setQuery(setVal);
+            inputRef.current.value = setVal;
+            
+        }
+    }, [setVal])
+
+    useEffect(() => {
+        if (resetFn && !setVal) {
+            
             resetFn(() => {
                 setQuery('')
                 setIsOpen(false)

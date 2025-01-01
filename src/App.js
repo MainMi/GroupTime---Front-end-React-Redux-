@@ -6,7 +6,7 @@ import SignPage from './pages/Sign/SignPage';
 import ProfilePage from './pages/Profile/ProfilePage';
 import GroupSearch from './pages/Group/GroupSearch/GroupSearch';
 import GroupInfo from './pages/Group/GroupInfo/GroupInfo';
-import GroupEdit from './pages/Group/GroupEdit/GroupEdit';
+import GroupCreate from './pages/Group/GroupCreate/GroupCreate';
 import SchedulePage from './pages/Schedule/SchedulePage';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
                 { path: 'profile', element: <ProfilePage /> },
                 { path: 'groups', element: <GroupSearch /> },
                 { path: 'groups/info/:groupId', element: <GroupInfo /> },
-                { path: 'groups/edit', element: <GroupEdit /> },
+                { path: 'groups/edit', element: <GroupCreate /> },
                 { path: 'schedule', element: <SchedulePage /> },
             ]
         }

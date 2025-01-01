@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import constants from '../../constants/constantEnum';
+import constants from '../../constants/calendarEnum';
 import ButtonSmall from '../Button/ButtonSmall';
 import classes from './Calendar.module.scss';
 import DayTable from './DayInfo/DayTable';

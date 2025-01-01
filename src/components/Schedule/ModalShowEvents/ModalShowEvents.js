@@ -5,10 +5,13 @@ import classes from './ModalShowEvents.module.scss'
 
 const ModalShowEvents = ({ events, onHiddenCart}) => {
     return <Modal modalClassname={classes.modalContent} onHiddenCart={onHiddenCart}>
+        
         <div className={classes.events}>
         {events && events.map((ev, idx) => {
             const { eventInfo, eventDate, intervalTime
             } = ev;
+            console.log(ev);
+            
             
             return (
                 <div className={classes.eventInfo} key={eventInfo.name + idx}>
@@ -18,7 +21,7 @@ const ModalShowEvents = ({ events, onHiddenCart}) => {
                         </div>
                         <div className={classes.sectionBox}>
                             <label htmlFor='teacher'>Викладач</label>
-                            <span>Викладача</span>
+                            <span>{eventInfo?.teacherName ? eventInfo?.teacherName : 'Викладач'}</span>
 
                             <label htmlFor='type'>Тип</label>
                             <Button>{eventInfo.type}</Button>
@@ -30,7 +33,7 @@ const ModalShowEvents = ({ events, onHiddenCart}) => {
                             <span>Zoom</span>
 
                             <label htmlFor='link'>Посилання</label>
-                            <span className={classes.link}>https://google.com</span>
+                            <span className={classes.link}>{eventInfo?.teacherName ? eventInfo?.link : 'https://google.com'}</span>
 
                             <label htmlFor='tag'>Теги</label>
                             <span className={classes.tag}>{eventInfo.tag}</span>

@@ -16,6 +16,7 @@ const useInput = (validateFn = false, nameValue, initialValue = '') => {
     const valueChangeHandler = (event) => {
         setEnteredValue(event.target.value)
     }
+    const setValueHandler = (data) => setEnteredValue(data); 
 
     const inputBlurHandler = (event) => {
         setIsTouch(true);
@@ -31,6 +32,7 @@ const useInput = (validateFn = false, nameValue, initialValue = '') => {
         isValidInput: !(arrayValidate.length),
         arrayError: checkError ? arrayValidate : [],
         valueChangeHandler,
+        setValueHandler,
         inputBlurHandler,
         resetFn
     }

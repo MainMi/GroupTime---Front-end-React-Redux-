@@ -12,7 +12,7 @@ import validateFn from '../../../constants/validateFn.enum';
 import Textarea from '../../../UI/Textarea/Textarea';
 import DatePicker from '../../../UI/DatePicker/DatePicker';
 
-const ModalCreateEvent = ({ modalOpen, modalClose }) => {
+const ModalCreateEvent = ({ modalClose }) => {
     const dispatch = useDispatch();
     let {
         value: valueTeacher,
@@ -92,8 +92,6 @@ const ModalCreateEvent = ({ modalOpen, modalClose }) => {
             modalClose();
         }
     }, [isValid, valueTeacher, valueName, valueType, valuePlace, valuePlatform, valueLink, valueTag, modalClose]);
-
-    if (!modalOpen) return null;
 
     return (
         <Modal onHiddenCart={modalClose} modalClassname={classes.modal}>

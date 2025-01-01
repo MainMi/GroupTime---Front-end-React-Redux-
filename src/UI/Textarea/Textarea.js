@@ -1,19 +1,18 @@
 import classes from './Textarea.module.scss'
 
-const Textarea = (props) => {
-    const {
-        label = false,
-        id,
-        error = '',
-        size = 14,
-        type = 'text',
-        style,
-        inputClassName,
-        labelClassName, 
-        ...otherProps
-    } = props;
+const Textarea = ({
+    label = false,
+    id,
+    error = '',
+    size = 14,
+    type = 'text',
+    style,
+    inputClassName,
+    labelClassName, 
+    ...otherProps
+}) => {
 
-    const className = `${classes.input} ${labelClassName} ${error ? classes.error : ''}`
+    const className = `${classes.input} ${inputClassName} ${error ? classes.error : ''}`
     const styleSize = { fontSize: `${size}px`};
     const inputSize = { ...styleSize, height: `${size + 18}px`, ...style};
     return <div className={classes.labelBox}>

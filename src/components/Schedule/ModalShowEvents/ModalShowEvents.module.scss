@@ -16,7 +16,7 @@
     display: grid;
     width: 100%;
     height: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 425px));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 600px));
     justify-content: center; /* Centers items horizontally */
     align-content: start; /* Aligns items at the start vertically */
     gap: 20px;

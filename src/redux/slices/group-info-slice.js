@@ -1,18 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    groupInfo: null,
+    groupsInfo: [],
 };
 
 const groupInfoSlice = createSlice({
-    name: 'auth',
+    name: 'groups',
     initialState,
     reducers: {
-        setGroupInfo: (state, action) => ({ ...state, ...action.payload }),
+        setGroupsInfo: (state, action) => ({ ...state, ...action.payload }),
+        addGroupInfo: (state, action) => {
+            const { id } = action.payload;
+            
+            const idx = state.groupsInfo.findIndex(group => group.id === id);
+
+            if (idx !== -1) {
+                state.groupsInfo[idx] = action.payload;
+                return;
+            } 
+            state.groupsInfo.push(action.payload);
+        }
     },
     extraReducers: {},
 });
 
 
 export const groupInfoAction = groupInfoSlice.actions;
+
 export default groupInfoSlice.reducer;

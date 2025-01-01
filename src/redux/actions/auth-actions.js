@@ -131,7 +131,7 @@ export async function fetchAuth(responseArgm = {}, navigate) {
 
         if (data.status >= 400 && data.status < 600) {
             console.error(data)
-            return { data };
+            return { data, status: response.status, ok: response.ok };
         }
 
         
